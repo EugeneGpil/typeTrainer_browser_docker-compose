@@ -2,24 +2,13 @@ version: '3.7'
 
 services:
 
-    nginx:
-        build: 
-            context: nginx
-            args:
-                - NGINX_VERSION=${NGINX_VERSION}
-        restart: unless-stopped
-        ports:
-            - ${NGINX_PORT}:80
-        working_dir: /etc/nginx/conf.d
-        volumes:
-            - ./nginx/conf.d:/etc/nginx/conf.d
-
     nuxt:
         build:
             context: nuxt
             args:
                 - NODE_VERSION=${NODE_VERSION}
                 - UID=${UID}
+                - GID=${GID}
         command: bash -c "tail -F anything"
         working_dir: /usr/share/nginx/html
         volumes:
@@ -27,3 +16,5 @@ services:
         environment:
             - HOST=0.0.0.0
         user: "${UID}:${GID}"
+        ports:
+            - ${NUXT_PORT}:3000
